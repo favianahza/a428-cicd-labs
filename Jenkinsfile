@@ -12,7 +12,7 @@ node {
         // Execute test.sh located on jenkins/scripts
         stage('Test') {
             // Wait for 10 second before testing React app
-            sh 'sleep 10'
+            sh 'sleep 15'
             sh './jenkins/scripts/test.sh'
         }
       }
