@@ -1,19 +1,29 @@
-// Changed from Declarative to Scripted Pipeline
-node {
-      // Scripted Pipeline Jenkinsfile
-      docker.image('node:lts-bullseye-slim').inside('-p 3000:3000') {
-        // Build stage
-        // Install Node package based on package.json
-        stage('Build') {
-            sh 'npm install'
+pipeline {
+    agent {
+        docker {
+            image 'node:lts-bullseye-slim' 
+            args '-p 3000:3000' 
         }
-
-        // Test Stage
-        // Execute test.sh located on jenkins/scripts
+    }
+    stages {
+        stage('Build') { 
+            steps {
+                sh 'npm install' 
+            }
+        }
         stage('Test') {
-            // Wait for 10 second before testing React app
-            sh 'sleep 15'
-            sh './jenkins/scripts/test.sh'
+            steps {
+              sh './jenkins/scripts/test.sh'
+            }
         }
-      }
+        stage('Deploy') {
+              steps {
+                  sh './jenkins/scripts/deliver.sh'
+                  input message: 'Sudah selesai menggunakan React App? (Klik "Proceed" untuk mengakhiri)'
+                  sh './jenkins/scripts/kill.sh'
+              }
+        }
+    }
+
+
 }
