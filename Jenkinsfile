@@ -19,7 +19,8 @@ pipeline {
         stage('Deploy') {
               steps {
                   sh './jenkins/scripts/deliver.sh'
-                  input message: 'Sudah selesai menggunakan React App? (Klik "Proceed" untuk mengakhiri)'
+                  println "React App will be started for 1 minute. Visit http://localhost:3000 to access the application."
+                  sleep time: 60, unit: 'SECONDS'
                   sh './jenkins/scripts/kill.sh'
               }
         }
